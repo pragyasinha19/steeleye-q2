@@ -1,0 +1,37 @@
+function highlightHTMLContent(htmlContent, plainText, plainTextPositions) {
+  const markedContent = htmlContent.split('').map((char, index) => {
+    const position = plainTextPositions.find(
+      pos => pos.start <= index && index <= pos.end
+    );
+    if (position) {
+      return `<mark>${char}</mark>`;
+    }
+    return char;
+  }).join('');
+
+  return markedContent;
+}
+
+// Jest tests
+describe('highlightHTMLContent', () => {
+  const htmlContent = `<p><span>Hi David<br><br>Headline: Energix Closes $520 Million Financing...</span></p>`;
+  const plainText = `Hi David Headline: Energix Closes $520 Million Financing...`;
+  const plainTextPositions = [
+    {
+      start: 0,
+      end: 8,
+    },
+    {
+      start: 10,
+      end: 27,
+    },
+  ];
+  const expectedOutput = `<p><span><mark>H</mark><mark>i</mark> <mark>D</mark><mark>a</mark><mark>v</mark><mark>i</mark><mark>d</mark><br><br><mark>H</mark><mark>e</mark><mark>a</mark><mark>d</mark><mark>l</mark><mark>i</mark><mark>n</mark><mark>e</mark>: <mark>E</mark><mark>n</mark><mark>e</mark><mark>r</mark><mark>g</mark><mark>i</mark><mark>x</mark> <mark>C</mark><mark>l</mark><mark>o</mark><mark>s</mark><mark>e</mark><mark>s</mark> $<mark>5</mark><mark>2</mark><mark>0</mark> <mark>M</mark><mark>i</mark><mark>l</mark><mark>l</mark><mark>i</mark><mark>o</mark><mark>n</mark> <mark>F</mark><mark>i</mark><mark>n</mark><mark>a</mark><mark>n</mark><mark>c</mark><mark>i</mark><mark>n</mark><mark>g</mark>...</span></p>`;
+
+  test('should highlight the specified positions in the HTML content', () => {
+    const result = highlightHTMLContent(htmlContent, plainText, plainTextPositions);
+    expect(result).toEqual(expectedOutput);
+  });
+
+  // Add more tests to cover various scenarios
+});
